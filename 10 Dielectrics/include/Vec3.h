@@ -177,4 +177,12 @@ Vec3 reflect(const Vec3& v, const Vec3& n) {
 	return v - 2 * n * dot(v, n);
 }
 
+// 折射向量  【需要画图+推导】
+// Snell's Law （仅用于各向同性介质构成的静止界面）
+// 参数1.入射光  参数2.法向量  参数3.光在介质中的折射率n1/n2
+Vec3 refract(const Vec3& r_in_unit, const Vec3& normal, double eta) {
+	Vec3 r_out_perpendicular = eta * (r_in_unit + dot(-r_in_unit, normal) * normal);
+	Vec3 r_out_parallel = -sqrt(1 - r_out_perpendicular.length_squared()) * normal;
+}
+
 #endif // !VEC3_H
