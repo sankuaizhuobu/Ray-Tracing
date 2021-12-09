@@ -12,6 +12,7 @@ class Material {
                         Ray& scattered, Color& attenuation) const = 0;
 };
 
+// Lambertian漫反射材质
 class Lambertian: public Material{
 public:
     Lambertian(const Color& a): albedo(a) {}
@@ -39,6 +40,7 @@ public:
 };
 
 
+// 金属材质
 class Metal: public Material {
 public: 
     Metal(const Color& a, double f) : albedo(a), fuzz(f < 1 ? f : 1) {}
@@ -58,6 +60,32 @@ public:
 public:
     Color albedo;  // RGB 反射率 [反射率+吸收率=1]
     double fuzz;  // 模糊系数 <=1
+};
+
+
+// 电介质材质
+class Dielectric: public Material {
+public: 
+    Dielectric(double index_of_refraction) : ir(index_of_refraction) {}
+
+    virtual bool scatter(const Ray& r_in, const Hit_record& rec, 
+                        Ray& scattered, Color& attenuation) const override
+    {
+        // *** 衰减系数 ***
+        attenuation = Color(1.0, 1.0, 1.0);  // 认为不衰减，全透射
+        
+        // *** 计算折射率 ***
+        // 光线击中外表面：1/ir；光线击中内表面：ir（假设外部是真空）
+        double refraction_ratio = rec.front_face ? (1.0 / ir) : ir;
+        
+        // *** 计算折射光线 ***
+        Vec3 r_in_unit = unit_vector(r_in.direction());
+        Vec3 refracted = refract(r_in_unit, rec.normal, refraction_ratio);
+        return true;  // 总是发生透射
+    }
+
+public:
+    double ir;  // Index of Refraction 折射率
 };
 
 #endif

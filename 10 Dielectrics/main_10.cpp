@@ -22,13 +22,6 @@ Color ray_color(const Ray& r, const Hittable& world, int depth) {  // 注：返回的
 	}
 
 	if (world.hit(r, 0.001, infinity, rec)) {  // 打在场景上的话，返回计算出的像素值
-
-		//Point3 target = rec.p + rec.normal + random_in_unit_sphere();  // 单位球中的随机点
-		//Point3 target = rec.p + rec.normal + random_unit_vector();  // 单位球面上的随机点[Lambertian distribution]
-		//Point3 target = rec.p + random_in_hemisphere(rec.normal);  // The initial hack
-		//Ray r_reflect(rec.p, target - rec.p);  // 得到反射光线
-		//return 0.5 * ray_color(r_reflect, world, depth - 1);  // 递归
-
 		Ray scattered;  // *** 定义散射光 ***
 		Color attenuation;  // *** 定义散射光的衰减系数 ***
 		// 若材质产生散射，则递归散射光；若没有散射（全吸收），则直接返回黑色
@@ -69,8 +62,10 @@ int main(int argc, char** args) {
 	
 	// *** 定义材质  计数=1
 	auto material_ground = std::make_shared<Lambertian>(Color(0.8, 0.8, 0));
-	auto material_center = std::make_shared<Lambertian>(Color(0.7, 0.3, 0.3));
-	auto material_left = std::make_shared<Metal>(Color(0.8, 0.8, 0.8), 0.2);
+	//auto material_center = std::make_shared<Lambertian>(Color(0.7, 0.3, 0.3));
+	//auto material_left = std::make_shared<Metal>(Color(0.8, 0.8, 0.8), 0.2);
+	auto material_center = std::make_shared<Dielectric>(1.5);
+	auto material_left = std::make_shared<Dielectric>(1.5);
 	auto material_right = std::make_shared<Metal>(Color(0.8, 0.6, 0.2), 1.0);
 
 	// *** 添加物体
