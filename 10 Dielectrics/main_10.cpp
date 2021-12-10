@@ -60,15 +60,19 @@ int main(int argc, char** args) {
 	//.........
 	Hittable_list world;  // 报错解决：hit() 重写时形参列表不一样
 	
-	// *** 定义材质  计数=1
-	auto material_ground = std::make_shared<Lambertian>(Color(0.8, 0.8, 0));
-	//auto material_center = std::make_shared<Lambertian>(Color(0.7, 0.3, 0.3));
-	//auto material_left = std::make_shared<Metal>(Color(0.8, 0.8, 0.8), 0.2);
-	auto material_center = std::make_shared<Dielectric>(1.5);
-	auto material_left = std::make_shared<Dielectric>(1.5);
-	auto material_right = std::make_shared<Metal>(Color(0.8, 0.6, 0.2), 1.0);
+	// *** 定义材质 *** 计数=1
+	//auto material_ground = std::make_shared<Lambertian>(Color(0.8, 0.8, 0));
+	//auto material_center = std::make_shared<Dielectric>(1.5);
+	//auto material_left = std::make_shared<Dielectric>(1.5);
+	//auto material_right = std::make_shared<Metal>(Color(0.8, 0.6, 0.2), 1.0);
 
-	// *** 添加物体
+	auto material_ground = std::make_shared<Lambertian>(Color(0.8, 0.8, 0));  // 黄色
+	auto material_center = std::make_shared<Lambertian>(Color(0.1, 0.2, 0.5));  // 偏蓝色
+	auto material_left = std::make_shared<Dielectric>(1.5);  // glass: 1.3-1.7
+	auto material_right = std::make_shared<Metal>(Color(0.8, 0.6, 0.2), 0.1);  // 偏黄的镜面球
+
+	// *** 添加物体 ***
+	// 球面
 	world.add(std::make_shared<Sphere>(Point3(0.0, -100.5, -1.0), 100.0, material_ground));
 	world.add(std::make_shared<Sphere>(Point3(0.0, 0.0, -1.0), 0.5, material_center));
 	world.add(std::make_shared<Sphere>(Point3(-1.0, 0.0, -1.0), 0.5, material_left));
@@ -79,7 +83,7 @@ int main(int argc, char** args) {
 
 	// Render
 	// ......
-	std::ofstream fout("output/Image14.ppm");  // ppm文件  里面是像素的RGB
+	std::ofstream fout("output/Image15.ppm");  // ppm文件  里面是像素的RGB
 	fout << "P3\n" << image_width << ' ' << image_height << "\n255\n";  // .ppm 文件的格式信息
 
 	for (int y = image_height - 1; y >= 0; --y) {  // y从下到上
@@ -101,7 +105,6 @@ int main(int argc, char** args) {
 				pixel_color += ray_color(r, world, max_depth);
 				// 对成像上的每一个像素发出光线，打在场景上，并计算像素颜色.
 				// 原本的像素颜色 += 光的颜色，最终累加，合成该像素的颜色
-
 			}
 			write_color(fout, pixel_color, samples_per_pixel);  // 写入ppm文件. 
 			// [注意：一个像素颜色的写入放在采样循环外面...]

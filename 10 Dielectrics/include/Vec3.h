@@ -173,6 +173,7 @@ Vec3 random_in_hemisphere(Vec3 normal) {
 }
 
 // 镜面反射向量  【需要画图理解】
+// 参数1.入射光单位向量（视线） 参数2.单位法向量
 Vec3 reflect(const Vec3& v, const Vec3& n) {
 	return v - 2 * n * dot(v, n);
 }
