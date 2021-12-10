@@ -81,6 +81,8 @@ public:
         // *** 计算折射光线 ***
         Vec3 r_in_unit = unit_vector(r_in.direction());
         Vec3 refracted = refract(r_in_unit, rec.normal, refraction_ratio);
+
+        scattered = Ray(rec.p, refracted);
         return true;  // 总是发生透射
     }
 
