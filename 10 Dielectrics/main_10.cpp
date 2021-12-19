@@ -1,4 +1,4 @@
-// main_8.cpp
+// main_10.cpp
 
 #include "include/rtweekend.h"
 #include "include/Color.h"
@@ -9,7 +9,6 @@
 
 #include <iostream>
 #include <fstream>
-
 
 Color ray_color(const Ray& r, const Hittable& world, int depth) {  // 注：返回的像素 RGB 值都是0.0-1.0的小数
 	
@@ -73,10 +72,14 @@ int main(int argc, char** args) {
 
 	// *** 添加物体 ***
 	// 球面
+	
 	world.add(std::make_shared<Sphere>(Point3(0.0, -100.5, -1.0), 100.0, material_ground));
 	world.add(std::make_shared<Sphere>(Point3(0.0, 0.0, -1.0), 0.5, material_center));
 	world.add(std::make_shared<Sphere>(Point3(-1.0, 0.0, -1.0), 0.5, material_left));
 	world.add(std::make_shared<Sphere>(Point3(1.0, 0.0, -1.0), 0.5, material_right));
+
+	// 三角网格
+	
 
 	// Camera
 	Camera camera;
